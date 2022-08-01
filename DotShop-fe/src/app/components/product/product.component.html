@@ -1,0 +1,13 @@
+<div class="card w-75 my-4 text-center container">
+  <div class="card-body px-0">
+    <div class="row align-items-center">
+      <h3 class="card-title col-8 mb-0 px-2">{{ productDetail.product_name }}</h3>
+      <div class="col-4 px-2">
+        <h3 class="card-subtitle text-secondary">Cost: {{ productDetail.cost }}<i class="fa-solid fa-euro-sign"></i></h3>
+        <p class="pt-2 card-subtitle text-muted">
+          Available: {{ productDetail.available_products }}
+        </p>
+        <button type="button" class="btn btn-secondary btn-sm mt-4" (click)="getIdProduct()">Add to cart<i class="ps-1 fa-solid fa-cart-shopping"></i></button>
+      </div>
+  </div>
+</div>

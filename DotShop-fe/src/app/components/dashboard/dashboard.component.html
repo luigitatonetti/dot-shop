@@ -1,0 +1,21 @@
+<app-header [cartElems]="cartProducts" [cartTotal]="total" [cartNumber]="cartNum" (deleteId)="deleteFromCart($event)"></app-header>
+<div class="bg-light min-vh-100 container-fluid ">
+  <div class="row">
+    <div class="col-12">
+      <h1 class="display-4 text-dark text-center py-3">Our products</h1>
+    </div>
+  </div>
+  <div class="container-fluid">
+    <div class="row justify-content-center align-items-center" >
+      <div class="col-12 col-lg-6" *ngFor="let product of filteredProducts">
+        <app-product (idGiven)="addToCart($event)" [productDetail]="product" ></app-product>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="row justify-content-center">
+      <button type="button" class="w-25 my-4 btn btn-lg btn-secondary" (click)="loadMore()">Load more</button>
+    </div>
+  </div>
+</div>
+

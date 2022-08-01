@@ -1,0 +1,29 @@
+<app-header [disabled]="disabled"></app-header>
+<div class="container">
+  <h1 class="display-4 text-dark text-center py-3">Orders</h1>
+</div>
+<div class="container w-50" *ngFor="let order of orders">
+  <div class="card my-4">
+    <div class="card-header text-left bg-dark text-light d-flex justify-content-between">
+      <h3 class="card-title mb-0">ID: {{ order.id_order }}</h3>
+      <button type="button" class=" btn btn-danger btn-sm" (click)="delete(order.id_order)">Delete<i class="ms-1 fa-solid fa-ban"></i></button>
+    </div>
+    <div class="card-body">
+      <div class="row align-items-center">
+        <div class="col-7">
+          <div class="container " *ngFor="let product of order.products">
+            <h2 class="card-subtitle text-dark mt-3">{{product.product_name}}  </h2>
+            <p class="pt-2 card-subtitle text-muted">
+              Quantity: {{product.product_quantity}}
+            </p>
+            <p class=" card-subtitle text-muted pb-3">
+              Cost: {{product.cost/ product.product_quantity | number : '1.1-1'}} <i class="fa-solid fa-euro-sign"></i>
+            </p>
+          </div>
+        </div>
+        <div class="col-5 text-center">
+          <h1 class="card-title text-dark">Total: {{order.total_cost | number : '1.1-1'}}<i class="fa-solid fa-euro-sign"></i></h1>
+        </div>
+    </div>
+  </div>
+</div>

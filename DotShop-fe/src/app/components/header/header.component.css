@@ -1,0 +1,19 @@
+a {
+  cursor: pointer;
+}
+.dropdown-menu {
+  width: 300px !important;
+}
+
+.badge {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  height: 14px;
+  width: 14px;
+  font-size: 8px;
+  top: -6px ;
+  left: 15px ;
+  border-radius: 50%;
+}

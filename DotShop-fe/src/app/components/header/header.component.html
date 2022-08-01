@@ -1,0 +1,50 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top py-1">
+  <a [routerLink]="['/dashboard']" class="navbar-brand ps-5 " >.Shop</a>
+  <button class="navbar-toggler me-3" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ms-auto pe-5">
+      <li class="nav-item active px-3">
+        <a [routerLink]="['/dashboard']" class="nav-link">Home <i class="ps-1 fa-solid fa-house-user"></i></a>
+      </li>
+      <li *ngIf="!disabled" class="nav-item dropdown px-3">
+        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Cart
+          <i class="ps-1 fa-solid fa-cart-shopping position-relative me-1">
+            <span class='badge position-absolute bg-light text-dark ' >{{cartNumber}}</span></i></a>
+        <div class="dropdown-menu dropdown-menu-right " aria-labelledby="navbarDropdown">
+          <div class="container">
+            <div class="row align-items-center text-center" *ngFor="let elem of cartElems">
+              <div class="col-8">
+                <h4> {{elem.product_name}}</h4>
+              </div>
+              <div class="col-4 text-secondary">
+                <div class="row">
+                  <h4>{{elem.cost }}<i class="fa-solid fa-euro-sign"></i> x{{ elem.available_products }}</h4>
+                </div>
+                <div class="row px-2">
+                  <button type="button" class="btn btn-danger btn-sm" (click)="getIdProduct(elem.id_product)">Delete<i class="ms-1 fa-solid fa-ban"></i></button>
+                </div>
+              </div>
+              <div class="dropdown-divider"></div>
+            </div>
+            <div class="row px-2">
+              <div class="align-items-center text-center h3 mb-0 py-2" *ngIf="cartElems.length > 0">Total: {{cartTotal | number : '1.1-1'}}<i class="fa-solid fa-euro-sign"></i></div>
+              <button type="button" class="btn btn-success btn-sm" *ngIf="cartElems.length > 0" [routerLink]="['/orders']" (click)="createOrder()">BUY NOW!<i class="ps-1 fa-solid fa-cart-shopping"></i></button>
+            </div>
+            <div class="row px-2">
+              <div class="align-items-center text-center h3 mb-0 py-2" *ngIf="cartElems.length == 0">No products added</div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li [routerLink]="['/orders']" class="nav-item px-3">
+        <a class="nav-link">Orders <i class="ps-1 fa-solid fa-list"></i></a>
+      </li>
+      <li class="nav-item px-3">
+        <a  class="nav-link" (click)="logout()">Logout <i class="ps-1 fa-solid fa-power-off"></i></a>
+      </li>
+    </ul>
+  </div>
+</nav>
