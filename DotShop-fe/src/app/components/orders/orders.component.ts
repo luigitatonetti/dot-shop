@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/models/Product';
+import { Router } from '@angular/router';
 import { User } from 'src/app/models/User';
 import { AccountService } from 'src/app/services/account.service';
 import { OrdersService } from 'src/app/services/orders.service';
@@ -18,32 +18,44 @@ export class OrdersComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private ordersService: OrdersService,
-    private productsService: ProductsService
+    private productsService: ProductsService,
   ) {
     this.accountService.user.subscribe((user) => {
       this.user = user;
     });
   }
 
-  ngOnInit(): void {
-    this.ordersService
+  ngOnInit() {
+    this.getOrders();
+  }
+
+  getOrders() {
+
+    return this.ordersService
       .getOrdersById(JSON.stringify(this.user))
       .subscribe(() => {
         this.ordersService.orders.subscribe((res) => {
-          this.orders.push(res);
-          this.orders = this.orders[0];
+          if(res.length>0){
+            this.orders = [];
+            this.orders = res;
+          } else {
+            this.orders = [];
+          }
         });
       });
   }
 
   delete(id: any) {
     let orderId = {id_order : id};
+    this.changeNum(id);
+
+    return this.ordersService.deleteOrder(JSON.stringify(orderId)).subscribe(() => this.ngOnInit() );
+  }
+
+  changeNum(id: any) {
     let dataProducts = {
       products:[] = this.orders.filter(x => x.id_order == id)[0]['products']
     }
-    console.log(JSON.stringify(dataProducts));
-    this.productsService.changeNumProducts(JSON.stringify(dataProducts)).subscribe();
-    this.ordersService.deleteOrder(JSON.stringify(orderId)).subscribe();
-    location.reload();
+    return this.productsService.changeNumProducts(JSON.stringify(dataProducts)).subscribe();
   }
 }
