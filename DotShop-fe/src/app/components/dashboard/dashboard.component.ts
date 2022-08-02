@@ -27,11 +27,7 @@ export class DashboardComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.readProducts();
-  }
-
-  readProducts() {
-    return this.productsService.getProducts().subscribe(
+    this.productsService.getProducts().subscribe(
       res => {
         this.allProducts = res;
         this.filterProducts();

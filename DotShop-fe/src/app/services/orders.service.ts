@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { Orders } from '../models/Orders';
 
 @Injectable({
@@ -12,7 +11,7 @@ export class OrdersService {
   private ordersSubject: BehaviorSubject<any> = new BehaviorSubject(null);
   public orders: Observable<any> = this.ordersSubject.asObservable();
 
-  private _url: string = environment.apiUrl ;
+  private _url: string = 'http://localhost:8000/';
 
   constructor(private http: HttpClient) { }
 
@@ -23,6 +22,7 @@ export class OrdersService {
   }
 
   createOrder(data: any) {
+
     return this.http.post<[]>(this._url + 'createOrder', data);
   }
 

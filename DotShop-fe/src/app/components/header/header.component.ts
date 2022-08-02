@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { Router } from '@angular/router';
 import { Product } from 'src/app/models/Product';
 import { User } from 'src/app/models/User';
 import { AccountService } from 'src/app/services/account.service';
@@ -26,8 +25,7 @@ export class HeaderComponent implements OnInit {
   constructor(
     private accountService: AccountService,
     private ordersService: OrdersService,
-    private productsService: ProductsService,
-    private router: Router
+    private productsService: ProductsService
   ) {}
 
   ngOnInit(): void {
@@ -64,14 +62,7 @@ export class HeaderComponent implements OnInit {
         product_quantity: -this.cartElems[i].available_products,
       })
     }
-
-    this.changeNum();
-    return this.ordersService.createOrder(JSON.stringify(this.dataOrder)).subscribe((data: any) => this.router.navigate(['orders']));
-
-  }
-
-  changeNum() {
-
-    return this.productsService.changeNumProducts(JSON.stringify(this.dataProducts)).subscribe();
+    this.ordersService.createOrder(JSON.stringify(this.dataOrder)).subscribe();
+    this.productsService.changeNumProducts(JSON.stringify(this.dataProducts)).subscribe();
   }
 }

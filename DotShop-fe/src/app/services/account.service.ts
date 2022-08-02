@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { BehaviorSubject, map, Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
 import { User } from '../models/User';
 
 @Injectable({
@@ -12,7 +11,7 @@ export class AccountService {
   private userSubject: BehaviorSubject<User | null>;
   public user: Observable<User | null>;
 
-  private _url: string = environment.apiUrl ;
+  private _url: string = 'http://localhost:8000/';
 
   constructor(private http: HttpClient, private router: Router) {
 
