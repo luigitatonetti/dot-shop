@@ -31,7 +31,7 @@
             </div>
             <div class="row px-2">
               <div class="align-items-center text-center h3 mb-0 py-2" *ngIf="cartElems.length > 0">Total: {{cartTotal | number : '1.1-1'}}<i class="fa-solid fa-euro-sign"></i></div>
-              <button type="button" class="btn btn-success btn-sm" *ngIf="cartElems.length > 0" [routerLink]="['/orders']" (click)="createOrder()">BUY NOW!<i class="ps-1 fa-solid fa-cart-shopping"></i></button>
+              <button type="button" class="btn btn-success btn-sm" *ngIf="cartElems.length > 0" (click)="createOrder() ">BUY NOW!<i class="ps-1 fa-solid fa-cart-shopping"></i></button>
             </div>
             <div class="row px-2">
               <div class="align-items-center text-center h3 mb-0 py-2" *ngIf="cartElems.length == 0">No products added</div>
@@ -39,8 +39,8 @@
           </div>
         </div>
       </li>
-      <li [routerLink]="['/orders']" class="nav-item px-3">
-        <a class="nav-link">Orders <i class="ps-1 fa-solid fa-list"></i></a>
+      <li  class="nav-item px-3">
+        <a class="nav-link" [routerLink]="['/orders']">Orders <i class="ps-1 fa-solid fa-list"></i></a>
       </li>
       <li class="nav-item px-3">
         <a  class="nav-link" (click)="logout()">Logout <i class="ps-1 fa-solid fa-power-off"></i></a>
