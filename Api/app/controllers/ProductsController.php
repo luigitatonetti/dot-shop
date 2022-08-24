@@ -2,7 +2,7 @@
 include_once 'core/bootstrap.php';
 class ProductsController
 {
-    public function readAll()
+    public function read()
     {
         header("Access-Control-Allow-Origin: *");
         header("Content-Type: application/json; charset=UTF-8");
@@ -27,41 +27,6 @@ class ProductsController
         } else {
             http_response_code(404);
             echo json_encode(array("message" => "No products found"));
-        }
-    }
-
-    
-    public function read()
-    {
-        header("Access-Control-Allow-Origin: *");
-        header("Content-Type: application/json; charset=UTF-8");
-        header("Access-Control-Allow-Methods: GET");
-        header("Access-Control-Max-Age: 3600");
-        header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-
-        $request = new APIRequest;
-        $request->decodeHttpRequest();
-        $data = $request->getBody();
-
-        $db = new db();
-        $db->openConnection();
-
-        $products = new Products($db);
-
-        $recordset = $products->select($data);
-
-        if (!empty($data['id_product'])) {
-            if ($recordset !== false) {
-                http_response_code(201);
-                echo json_encode($recordset);
-            } else {
-                http_response_code(404);
-                echo json_encode(array("message" => "Product not found"));
-            }
-        } else {
-            http_response_code(400);
-            echo json_encode(array("message" => "Missing data"));
         }
     }
 

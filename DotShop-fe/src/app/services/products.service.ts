@@ -15,6 +15,7 @@ export class ProductsService {
   }
 
   changeNumProducts(data: any) {
-    return this.http.put<[]>(this._url + 'product', data);
+
+    return this.http.put<[]>(this._url + 'products', data);
   }
 }

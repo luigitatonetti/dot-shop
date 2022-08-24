@@ -10,63 +10,7 @@ class Orders
 		$this->pdo = $pdo;
 	}
 
-	function selectAll()
-	{
-		$sql = "
-		SELECT
-			id_order, p.id_product, p.product_name, o.product_quantity, 
-			(o.product_quantity * p.cost) AS cost, product_name
-
-		FROM orders AS o
-
-			LEFT JOIN products AS p
-				ON p.id_product = o.id_product
-				
-		ORDER BY id_order ASC";
-
-		$st = $this->pdo->getConnection()->prepare($sql);
-		if ($st->execute()) {
-			$rows = array();
-			while (($row = $st->fetch(PDO::FETCH_ASSOC)) !== false) {
-				$rows[] = $row;
-			}
-
-			$orders = array();
-			$order = array();
-			foreach ($rows as $row) {
-
-				if (!isset($orders[(int)$row['id_order']])) {
-
-					$order['id_order'] = (int)$row['id_order'];
-					$order['total_cost'] = (float)$row['cost'];
-					$order['products'] = array();
-
-					$order['products'][] = array(
-						'id_product' => $row['id_product'],
-						'product_name' => $row['product_name'],
-						'product_quantity' => (int)$row['product_quantity'],
-						'cost' => (float)$row['cost']
-					);
-
-					$orders[(int)$row['id_order']] = $order;
-				} else {
-					$orders[(int)$row['id_order']]['total_cost'] += (float)$row['cost'];
-
-					$orders[(int)$row['id_order']]['products'][] = array(
-						'id_product' => $row['id_product'],
-						'product_name' => $row['product_name'],
-						'product_quantity' => (int)$row['product_quantity'],
-						'cost' => (float)$row['cost']
-					);
-				}
-			}
-			return $orders;
-		} else {
-			return false;
-		}
-	}
-
-	function select($data)
+	function select($id)
 	{
 		$sql = "
 		SELECT
@@ -81,70 +25,72 @@ class Orders
 		ORDER BY id_order ASC";
 
 		$st = $this->pdo->getConnection()->prepare($sql);
-		if ($st->execute(array('id_user' => $data['id_user']))) {
-			$rows = array();
-			while (($row = $st->fetch(PDO::FETCH_ASSOC)) !== false) {
-				$rows[] = $row;
-			}
 
-			$orders = array();
-			foreach ($rows as $row) {
-				
-				if(!isset($orders[(int)$row['id_order']])){
+		if (!$st->execute(array('id_user' => $id))){
+			return false;
+		}
+		
+		$rows = array();
+		while (($row = $st->fetch(PDO::FETCH_ASSOC)) !== false) {
+			$rows[] = $row;
+		}
 
-					$order = array();
-					if (empty($order)) {
+		$orders = array();
+		foreach ($rows as $row) {
+			
+			if(!isset($orders[(int)$row['id_order']])){
 
-						$order['id_order'] = (int)$row['id_order'];
-						$order['total_cost'] = (float)$row['cost'];
-						$order['products'] = array();
-						
-						$order['products'][] = array(
-							'id_product' => $row['id_product'],
-							'product_name' => $row['product_name'],
-							'product_quantity' => (int)$row['product_quantity'],
-							'cost' => (float)$row['cost']
-						);
-					} else {
-	
-						if(isset($order['total_cost']))
-							$order['total_cost'] += (float)$row['cost'];
-	
-						$order['products'][] = array(
-							'id_product' => $row['id_product'],
-							'product_name' => $row['product_name'],
-							'product_quantity' => (int)$row['product_quantity'],
-							'cost' => (float)$row['cost']
-						);
-					}
-					$orders[(int)$row['id_order']] = $order;
-				} else {
+				$order = array();
+				if (empty($order)) {
+
+					$order['id_order'] = (int)$row['id_order'];
+					$order['total_cost'] = (float)$row['cost'];
+					$order['products'] = array();
 					
-
-					$orders[(int)$row['id_order']]['total_cost'] += (float)$row['cost'];
-
-					$orders[(int)$row['id_order']]['products'][] = array(
+					$order['products'][] = array(
 						'id_product' => $row['id_product'],
 						'product_name' => $row['product_name'],
 						'product_quantity' => (int)$row['product_quantity'],
 						'cost' => (float)$row['cost']
 					);
+				} else {
 
-					
+					if(isset($order['total_cost']))
+						$order['total_cost'] += (float)$row['cost'];
+
+					$order['products'][] = array(
+						'id_product' => $row['id_product'],
+						'product_name' => $row['product_name'],
+						'product_quantity' => (int)$row['product_quantity'],
+						'cost' => (float)$row['cost']
+					);
 				}
+				$orders[(int)$row['id_order']] = $order;
+			} else {
 				
 
+				$orders[(int)$row['id_order']]['total_cost'] += (float)$row['cost'];
 
-			}
-			$ordersClean = array();
-			foreach($orders as $order){
-				$ordersClean[] = $order;
+				$orders[(int)$row['id_order']]['products'][] = array(
+					'id_product' => $row['id_product'],
+					'product_name' => $row['product_name'],
+					'product_quantity' => (int)$row['product_quantity'],
+					'cost' => (float)$row['cost']
+				);
+
+				
 			}
 			
-			return $ordersClean;
-		} else {
-			return false;
+
+
 		}
+		$ordersClean = array();
+		foreach($orders as $order){
+			$ordersClean[] = $order;
+		}
+		
+		return $ordersClean;
+
 	}
 
 	function create($data)
@@ -177,7 +123,7 @@ class Orders
 			return false;
 	}
 
-	function delete(array $data)
+	function delete($id)
 	{
 
 		$sql = "
@@ -185,12 +131,14 @@ class Orders
 			WHERE id_order = :id_order";
 		$st = $this->pdo->getConnection()->prepare($sql);
 
-		if ($st->execute(array('id_order' => $data['id_order']))) {
+		if ($st->execute(array('id_order' => $id))) {
 			return true;
 		}
 	}
 
-	protected function getLastId()
+	//Due to the order management in the database, the order id must be managed through the getLastId method
+
+	protected function getLastId() 
 	{
 		$sql = "SELECT MAX(id_order) as max FROM orders";
 

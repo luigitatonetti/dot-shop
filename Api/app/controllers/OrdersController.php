@@ -3,33 +3,6 @@ include_once('core/bootstrap.php');
 
 class OrdersController
 {
-    public function readAll()
-    {
-        header("Access-Control-Allow-Origin: *");
-        header("Content-Type: application/json; charset=UTF-8");
-        header("Access-Control-Allow-Methods: GET");
-        header("Access-Control-Max-Age: 3600");
-        header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-
-
-        $request = new APIRequest;
-        $request->decodeHttpRequest();
-
-        $db = new db();
-        $db->openConnection();
-
-        $orders = new Orders($db);
-
-        $recordset = $orders->selectAll();
-
-        if ($recordset !== false) {
-            http_response_code(201);
-            echo json_encode($recordset);
-        } else {
-            http_response_code(404);
-            echo json_encode(array("message" => "No orders found"));
-        }
-    }
 
     public function read()
     {
@@ -42,16 +15,16 @@ class OrdersController
 
         $request = new APIRequest;
         $request->decodeHttpRequest();
-        $data = $request->getBody();
-
+        $param = $_SERVER['REQUEST_URI'];
+        $param = explode('/', $param);
+        $id = $param[2];
         $db = new db();
         $db->openConnection();
 
         $order = new Orders($db);
 
-        $recordset = $order->select($data);
-
-        if (!empty($data['id_user'])) {
+        if (!is_null($id)) {
+            $recordset = $order->select($id);
             if ($recordset !== false) {
                 http_response_code(201);
                 echo json_encode($recordset);
@@ -109,15 +82,18 @@ class OrdersController
 
         $request = new APIRequest;
         $request->decodeHttpRequest();
-        $data = $request->getBody();
 
+        $param = $_SERVER['REQUEST_URI'];
+        $param = explode('/', $param);
+        $id = $param[2];
+        
         $db = new db();
         $db->openConnection();
 
         $order = new Orders($db);
 
-        if (!empty($data['id_order'])) {
-            if ($order->delete($data)) {
+        if (!is_null($id)) {
+            if ($order->delete($id)) {
                 http_response_code(200);
                 echo json_encode(array("message" => "Order deleted"));
             } else {

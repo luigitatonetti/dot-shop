@@ -27,7 +27,7 @@ export class OrdersComponent implements OnInit {
 
   ngOnInit(): void {
     this.ordersService
-      .getOrdersById(JSON.stringify(this.user))
+      .getOrdersById(JSON.stringify(this.user?.id_user))
       .subscribe(() => {
         this.ordersService.orders.subscribe((res) => {
           this.orders.push(res);
@@ -37,13 +37,12 @@ export class OrdersComponent implements OnInit {
   }
 
   delete(id: any) {
-    let orderId = {id_order : id};
     let dataProducts = {
       products:[] = this.orders.filter(x => x.id_order == id)[0]['products']
     }
     console.log(JSON.stringify(dataProducts));
     this.productsService.changeNumProducts(JSON.stringify(dataProducts)).subscribe();
-    this.ordersService.deleteOrder(JSON.stringify(orderId)).subscribe();
+    this.ordersService.deleteOrder(id).subscribe();
     location.reload();
   }
 }

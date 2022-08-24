@@ -14,11 +14,20 @@ class Router
 
     public function direct($uri, $requestType)
     {
-
         if (array_key_exists($uri, $this->routes[$requestType])) {
             return $this->callAction(
                 ...explode('@', $this->routes[$requestType][$uri])
             );
+        }
+
+        foreach ($this->routes[$requestType] as $regex => $controller) {
+            $pattern = preg_replace('/\/:[a-zA-Z0-9]+/', '\/[a-zA-Z0-9]+', $regex);
+            $pattern = '/' . $pattern . '/';
+            if (preg_match($pattern, $uri) === 1) {
+                return $this->callAction(
+                    ...explode('@', $this->routes[$requestType][$regex])
+                );
+            }
         }
 
         throw new Exception('No route defined for this URI.');

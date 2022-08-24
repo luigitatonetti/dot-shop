@@ -15,19 +15,19 @@ export class OrdersService {
 
   constructor(private http: HttpClient) { }
 
-  getOrdersById(data: any) {
-    return this.http.post<Orders[]>(this._url + 'readOrder', data).pipe(
+  getOrdersById(id: any) {
+    return this.http.get<Orders[]>(this._url + 'orders/' + id).pipe(
       map( (res: Array<Orders>) => {this.ordersSubject.next(res);})
     );
   }
 
   createOrder(data: any) {
 
-    return this.http.post<[]>(this._url + 'createOrder', data);
+    return this.http.post<[]>(this._url + 'orders', data);
   }
 
-  deleteOrder(data: any) {
-    return this.http.delete<[]>(this._url + 'order',{body: data} );
+  deleteOrder(id: any) {
+    return this.http.delete<[]>(this._url + 'orders/' + id);
   }
 
 }

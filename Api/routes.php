@@ -2,20 +2,18 @@
 
 return $routes = [
     'GET' => [
-        'orders' => 'OrdersController@readAll',
-        'products' => 'ProductsController@readAll',
-        'product' => 'ProductsController@read'
+        'products' => 'ProductsController@read',
+        'orders/:id' => 'OrdersController@read',
     ],
     'PUT' => [
-        'product' => 'ProductsController@update'
+        'products' => 'ProductsController@update'
     ],
     'POST' => [
-        'createOrder' => 'OrdersController@create',
-        'readOrder' => 'OrdersController@read',
+        'orders' => 'OrdersController@create',
         'createUser' => 'UsersController@create',
         'readUser' => 'UsersController@read'
     ],
     'DELETE' => [
-        'order' => 'OrdersController@delete'
+        'orders/:id' => 'OrdersController@delete'
     ]
 ];
